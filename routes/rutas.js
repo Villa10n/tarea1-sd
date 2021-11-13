@@ -48,7 +48,50 @@ router.get('/DailySummary', async (req, res) => {
         await consumer.disconnect();
         console.log(arr);
     }, 10000);
+    ids_carritos=[]
+    //agregar todos los ids recibidos
 
+    if(sumar==1){ 
+        var hoy=new Date();   
+        arr.forEach(element =>{
+            ids_carritos.push(
+                {
+                    'id':element.id_carrito,
+                    'cocinero':element.email_cocinero,
+                    'vendedor':element.email_vendedor
+                });
+        } );
+        //guarda los valores unicos de cada carrito
+        ids_carritos=ids_carritos.id.filter(onlyUnique);
+
+        for (let i of ids_carritos){
+            contador=0;
+            for(let j of arr ){
+                //cuando el id carrito coincide con el j.id le suma la cantidad
+                if( ids_carritos[i] == j.id_carrito){
+                    //
+                    contador=contador+j.cantidad
+                }
+            }
+            // ingresar total y dia de carrito para el dailySumari
+            ids_carritos[i]['total_vendido']=contador
+            ids_carritos[i]['fecha']=`${hoy.getFullYear()}-${hoy.getMonth() + 1}-${hoy.getDate()}`
+        }
+        // Conexiones
+        const producer = kafka.producer();
+        
+        
+        // Guardamos los dailysummary en el topic 
+        await producer.connect()
+        for (let i of ids_carritos){
+            await producer.send({
+                        topic: 'dailySummary',
+                        messages: [
+                            { value: data },
+                        ],});
+        }
+        await producer.disconnect()
+    }
     // Desconectemos al consumidor
     return res.status(200).json({
         ok: true,
