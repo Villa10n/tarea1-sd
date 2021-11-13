@@ -1,19 +1,28 @@
 const { Router } = require('express');
 const router = Router();
-const kafka = require('kafka-node');
+const { Kafka } = require('kafkajs');
 
+const kafka = new Kafka({
+    clientId: 'my-app',
+    brokers: ['localhost:9092']
+});
 
 router.post('/orders', async (req, res) => {
     const data = JSON.stringify(req.body);
-
+    
     // Conexiones
-    const client = new kafka.KafkaClient({kafkaHost: 'localhost:9092'});
-    var producer = new kafka.Producer(client);
+    const producer = kafka.producer();
     
     // Guardamos en orders
-    producer.on('ready', async function () {
-        await producer.send( [ { topic: "orders", messages: data }], function (err,data) {console.log('enviado')} )
+    await producer.connect()
+    await producer.send({
+        topic: 'orders',
+        messages: [
+            { value: data },
+        ],
     });
+
+    await producer.disconnect()
 
     return res.status(200).json({
         ok: true,
@@ -21,50 +30,30 @@ router.post('/orders', async (req, res) => {
     });
 });
 
-router.get('/DailySummary2', async (req, res) => {
-    const client = new kafka.KafkaClient({kafkaHost: 'localhost:9092'});
-    var consumer = new kafka.Consumer(client, [ { topic: 'orders' } ]);
-    await consumer.on('message', function (message) {
-    	console.log(message);
-	});
-    consumer.commit(function(err, data) {
-        return res.status(200).json({
-            ok: true,
-            msg: 'daily'
-        });
-    });
-    // Desconectemos al consumidor
-});
-
 router.get('/DailySummary', async (req, res) => {
-    const client = new kafka.KafkaClient({kafkaHost: 'localhost:9092'});
-    var consumer = new kafka.Consumer(client, [ { topic: 'orders' } ]);
-    await consumer.on('message', function (message) {
-    	console.log(message);
-	});
-    arr=[]
-    contador=0
-    //Escucha solo por 10 segundos y corta la coxion, cuando deja de escucha envia un mensaje
-    dia=setInterval(function() {
-        consumer.on('message', function (message) {
-            console.log(message);
-            arr.append(message);
-        });
-        contador=contador+1
-    }, 5000);
+    const consumer = kafka.consumer({ groupId: 'test-group' });
 
-    if (contador== 1){
-        clearInterval(dia)
-        print(arr)
-    }
+    arr = [];
 
-    consumer.commit(function(err, data) {
-        return res.status(200).json({
-            ok: true,
-            msg: 'daily'
-        });
+    await consumer.connect();
+    await consumer.subscribe({ topic: 'orders', fromBeginning: false });
+
+    await consumer.run({
+        eachMessage: async ({ topic, partition, message }) => {
+            arr.push(message.value.toString());
+        },
     });
+
+    setTimeout(async function() {
+        await consumer.disconnect();
+        console.log(arr);
+    }, 10000);
+
     // Desconectemos al consumidor
+    return res.status(200).json({
+        ok: true,
+        msg: 'daily'
+    });
 });
 
 module.exports = router;
