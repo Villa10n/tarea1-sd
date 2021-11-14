@@ -1,5 +1,3 @@
-Integrantes: Jose Arteaga, Diego Saavedra, Joaquin  Villalon
-
 
 Este proyecto fue realizado utilizando el SO Ubuntu 20.04, una distrubución de Linnux basado en Debian.
 
@@ -12,39 +10,32 @@ Para poder iniciar el servidor, debe instalar los siguientes paquetes: Node.js -
          En caso de no tener instalado curl, siga las indicaciones que se le mostraran en su consola.
          
 Luego en la carpeta que haya clonado este repositorio, debe ejecutar el siguiente comando:
+
                       npm install
                       
 Este comando descargara automanticamente todas las dependencias que requiere el proyecto, en este caso son express y nodemon.
 
 Una vez completados estos pasos, su servidor estará listo para arrancar con el comando:  npm run dev
 
-Ahora, para la instalación de redis, debe ejecutar los siguientes comandos y esperar a que cada uno de ellos finalice:
+Ahora, para la instalación de Kafka, debe visitar el siguiente sitio web: https://kafka.apache.org/downloads donde debe escoger el archivo
+correspondiente a su distribución (Linux para este caso).
 
-                      sudp apt update
-                      sudo apt install -y redis
-                      sudo apt install redis-tools
+Una vez descargado, debe mover el archivo a la carpeta que estime conveniente, una vez hecho esto, haga click derecho sobre
+el archivo y pulse "Extraer Aquí", para descomprimir el archivo. Una nueva carpeta se generará, ingrese a ella y abra un terminal, 
+hecho esto proceda a ejecutar el siguiente comando:
+
+                      bin/zookeeper-server-start.sh config/zookeeper.properties
                       
-Ya tenemos intalado redis, ahora vamos a comprobar si fue correcta su instalación y si está operando, para esto debemos ejecutar los
-siguientes comandos y esperar a que cada uno de ellos finalice:
+Hecho esto tendremos zookeeper arrancado, el cual  proporciona un servicio de configuración distribuido, un servicio de sincronización
+ y un registro de nomenclatura para sistemas distribuidos.
+
+Ahora debemos arrancar Kafka, para esto usamos un comando similar, debemos abrir otro terminal en la carpeta que estabamos anteriormente
+y ejecutar el siguiente comando:
             
-                      redis-cli
+                      bin/kafka-server-start.sh config/server.properties
           
-          Al ejecutar este comando tendremos corriendo nuestro servidor de redis, se mostrará nuestra dirección de localhost junto con
-          un puerto por defecto, el cual suele tener este aspecto: 127.0.0.1:6379>
-          para verificar que todo está en orden, debemos escribir el comando "ping", sin comillas y todo en minúsculas, a lo que se nos
-          contestará con un "PONG", lo que indica que tenemos conexión.
+          Ya tenemos Apache Kafka funcionando perfectamente.
           
-Ahora debemos setear algunos valores, para esto, dentro del servicio de redis, debemos introducir los siguientes comandos:
-
-                      config get maxmemory
-                      config set maxmemory 1M
-                      config set maxmemory-policy volatile-lru
-El primer comando sirve para ver la configuracion de la memoria máxima que puede utilizar redis; el segundo comando setea la memoria maxima en 1mb, y finalmente el último comando configura el uso de memoria con el algoritmo de lru, el cual consiste en que en el caso de que se llene la memoria de 1mb, se eliminara el dato más antiguo en memoria siempre y cuando este libere el espacio necesario para insertar el nuevo dato.
-
-Teniendo todas estas configuraciones, el servicio completo está listo para usarse ;D
-
-Cabe recalcar que en nuestra tarea, la ruta de buscador si hace la verificación de si el búsqueda ya se encuentra en la cache, pero si no la encuentra, este accede directamente al archivo json donde se encuentra el inventario, esto debido a que no logramos implementar la comunicacion con mediante el metodo grpc con el servidor.
-                    
           
           
           
