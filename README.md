@@ -34,7 +34,7 @@ y ejecutar el siguiente comando:
             
                       bin/kafka-server-start.sh config/server.properties
           
-          Ya tenemos Apache Kafka funcionando perfectamente.
+      Ya tenemos Apache Kafka funcionando perfectamente.
           
           
           
