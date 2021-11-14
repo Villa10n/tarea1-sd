@@ -47,8 +47,7 @@ Ahora para inicializar los topic deseados, debemos iniciar dos nuevos terminales
 Luego en la antes mencionada carpeta donde clonamos este repositorio e introducimos el comando npm install por consola, debemos ejecutar el siguiente comando:
 
 ```
-                npm run dev
-                
+                npm run dev                
 ```
 
 Con esto tendremos nuestra API corriendo y funcionando, conectada con los servicios y topics de Apache Kafka.
