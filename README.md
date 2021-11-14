@@ -38,12 +38,11 @@ y ejecutar el siguiente comando:
           
           
 Ahora para inicializar los topic deseados, debemos iniciar dos nuevos terminales dentro de nuestra carpeta de Kafka, luego en cada uno de ellos usamos los siguientes comandos, uno en cada terminal:
-
-<p>
+```
 
 /bin/kafka-console-producer.sh --broker-list localhost:9092 --topic orders
 /bin/kafka-console-producer.sh --broker-list localhost:9092 --topic DailySummary
 
-</p>
+```
 
           
