@@ -40,9 +40,16 @@ y ejecutar el siguiente comando:
 Ahora para inicializar los topic deseados, debemos iniciar dos nuevos terminales dentro de nuestra carpeta de Kafka, luego en cada uno de ellos usamos los siguientes comandos, uno en cada terminal:
 ```
 
-/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic orders
-/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic DailySummary
+                /bin/kafka-console-producer.sh --broker-list localhost:9092 --topic orders
+                /bin/kafka-console-producer.sh --broker-list localhost:9092 --topic DailySummary
 
 ```
+Luego en la antes mencionada carpeta donde clonamos este repositorio e introducimos el comando npm install por consola, debemos ejecutar el siguiente comando:
 
+```
+                npm run dev
+                
+```
+
+Con esto tendremos nuestra API corriendo y funcionando, conectada con los servicios y topics de Apache Kafka.
           
