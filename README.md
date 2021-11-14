@@ -34,7 +34,7 @@ y ejecutar el siguiente comando:
             
                       bin/kafka-server-start.sh config/server.properties
           
-                                                                        Ya tenemos Apache Kafka funcionando perfectamente.
+                                                            Ya tenemos Apache Kafka funcionando perfectamente.
           
           
 Ahora para inicializar los topic deseados, debemos iniciar dos nuevos terminales dentro de nuestra carpeta de Kafka, luego en cada uno de ellos usamos los siguientes comandos, uno en cada terminal:
