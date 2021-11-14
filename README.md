@@ -50,5 +50,8 @@ Luego en la antes mencionada carpeta donde clonamos este repositorio e introduci
                 npm run dev                
 ```
 
-Con esto tendremos nuestra API corriendo y funcionando, conectada con los servicios y topics de Apache Kafka.
+Con esto tendremos nuestra API corriendo y funcionando, conectada con los servicios y topics de Apache Kafka
+
+La primera funcionalidad del sistema corresponde a una ruta tipo post llamada ""de prodcutor, la cual agrega elementos al topico de orders,
+
           
